@@ -1,5 +1,7 @@
 var yyy = document.getElementById('xxx')
 var context = yyy.getContext('2d')
+var lineWidth = 5
+
 
 
 autosetcanvas(yyy)
@@ -7,16 +9,81 @@ autosetcanvas(yyy)
 listenToMouse(yyy)
 
 var eraserEnabled = false //控制橡皮擦是否开启
+
+pen.onclick = function() {
+    eraserEnabled = false
+    pen.classList.add('active')
+    eraser.classList.remove('active')
+}
 eraser.onclick = function() {
     eraserEnabled = true
-    actions.className = 'actions x'
-
+    eraser.classList.add('active')
+    pen.classList.remove('active')
 }
-brush.onclick = function() {
-    eraserEnabled = false
-    actions.className = 'actions'
-
+clear.onclick = function() {
+    context.clearRect(0, 0, yyy.width, yyy.height); //用等同于页面大小的空白填充页面达到清空的效果
 }
+save.onclick = function() {
+    var url = yyy.toDataURL("img/png")
+    var a = document.createElement('a')
+    document.body.appendChild(a)
+    a.href = url
+    a.save = '我的画'
+    a.target = '_blank'
+    a.click()
+}
+
+black.onclick = function() {
+    context.strokeStyle = 'black'
+    black.classList.add('active')
+    green.classList.remove('active')
+    blue.classList.remove('active')
+    red.classList.remove('active')
+}
+
+red.onclick = function() {
+    context.strokeStyle = 'red'
+    red.classList.add('active')
+    green.classList.remove('active')
+    blue.classList.remove('active')
+    black.classList.remove('active')
+}
+green.onclick = function() {
+    context.strokeStyle = 'green'
+    red.classList.remove('active')
+    green.classList.add('active')
+    blue.classList.remove('active')
+    black.classList.remove('active')
+}
+blue.onclick = function() {
+    context.strokeStyle = 'blue'
+    red.classList.remove('active')
+    green.classList.remove('active')
+    blue.classList.add('active')
+    black.classList.remove('active')
+}
+
+thin.onclick = function() {
+    lineWidth = 5
+    thin.classList.add('active')
+    thick.classList.remove('active')
+}
+thick.onclick = function() {
+    lineWidth = 10
+    thin.classList.remove('active')
+    thick.classList.add('active')
+}
+
+// eraser.onclick = function() {
+//     eraserEnabled = true
+//     actions.className = 'actions x'
+
+// }
+// brush.onclick = function() {
+//     eraserEnabled = false
+//     actions.className = 'actions'
+
+// }
 
 //++++++++++++++++++++++++++++++++++++++++++++//
 
@@ -31,9 +98,8 @@ function drawcircle(x, y, radius) {
 function drawline(x1, y1, x2, y2) {
     var context = xxx.getContext('2d')
     context.beginPath()
-    context.strokeStyle = 'black'
+    context.lineWidth = lineWidth
     context.moveTo(x1, y1)
-    context.lineWidth = 5
     context.lineTo(x2, y2)
     context.stroke()
     context.closePath()
